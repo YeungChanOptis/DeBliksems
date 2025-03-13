@@ -6,6 +6,7 @@ export const userTable = pgTable('user', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	firstName: text('first_name').notNull(),
 	lastName: text('last_name').notNull(),
+	email: text('email').notNull(),
 	remainingBudget: decimal('remaining_budget').notNull(),
 	role: text('role', { enum: ROLES }).notNull()
 });
@@ -22,10 +23,13 @@ export const trainingTable = pgTable('training', {
 
 export type Training = typeof trainingTable.$inferSelect;
 
+const REQUEST_STATES = ['PENDING', 'APPROVED', 'DENIED'] as const;
+
 export const trainingRequestTable = pgTable('training_request', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	description: text('description'),
 	durationDays: decimal('duration_days').notNull(),
+	status: text('status', { enum: REQUEST_STATES }),
 	userId: uuid('user_id').references(() => userTable.id),
 	trainingId: uuid('training_id').references(() => trainingTable.id)
 });
