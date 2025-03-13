@@ -2,9 +2,13 @@
   export let name: string;
   export let description: string;
   export let date: string;
+  export let image: string;
 </script>
 
 <div class="card w-96 bg-base-100 shadow-xl m-4">
+  <figure>
+    <img src={image} alt={name} class="w-full h-48 object-cover" />
+  </figure>
   <div class="card-body">
     <h2 class="card-title">{name}</h2>
     <p>{description}</p>
