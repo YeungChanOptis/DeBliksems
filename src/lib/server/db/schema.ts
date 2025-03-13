@@ -1,6 +1,45 @@
-import { pgTable, serial, text, integer } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, text, decimal, date } from 'drizzle-orm/pg-core';
 
-export const user = pgTable('user', {
-	id: serial('id').primaryKey(),
-	age: integer('age')
+const ROLES = ['USER', 'ADMIN'] as const;
+
+export const userTable = pgTable('user', {
+	id: uuid('id').primaryKey().defaultRandom(),
+	firstName: text('first_name').notNull(),
+	lastName: text('last_name').notNull(),
+	remainingBudget: decimal('remaining_budget').notNull(),
+	role: text('role', { enum: ROLES }).notNull()
 });
+
+export type User = typeof userTable.$inferSelect;
+
+export const trainingTable = pgTable('training', {
+	id: uuid('id').primaryKey().defaultRandom(),
+	name: text('name').notNull(),
+	date: date('date', { mode: 'string' }).notNull(),
+	description: text('description'),
+	price: decimal('price').notNull()
+});
+
+export type Training = typeof trainingTable.$inferSelect;
+
+export const trainingRequestTable = pgTable('training_request', {
+	id: uuid('id').primaryKey().defaultRandom(),
+	description: text('description'),
+	durationDays: decimal('duration_days').notNull(),
+	userId: uuid('user_id').references(() => userTable.id),
+	trainingId: uuid('training_id').references(() => trainingTable.id)
+});
+
+export type TrainingRequest = typeof trainingRequestTable.$inferSelect;
+
+const COST_TYPES = ['Transport', 'Accomodation', 'Internal Days', 'Other'] as const;
+
+export const costTable = pgTable('cost', {
+	id: uuid('id').primaryKey().defaultRandom(),
+	name: text('name').notNull(),
+	amount: decimal('amount').notNull(),
+	type: text('type', { enum: COST_TYPES }).notNull(),
+	trainingRequestId: uuid('training_request_id').references(() => trainingRequestTable.id)
+});
+
+export type Cost = typeof costTable.$inferSelect;
