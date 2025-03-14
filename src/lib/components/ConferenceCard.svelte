@@ -13,7 +13,7 @@
 	</figure>
 	<div class="card-body">
 		<h2 class="card-title">{name}</h2>
-		<p>{description}</p>
+		<p class="line-clamp-2">{description}</p>
 		<div class="mt-2 flex items-center gap-2">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
