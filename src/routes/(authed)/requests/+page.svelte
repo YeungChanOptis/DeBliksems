@@ -13,5 +13,5 @@
 			<RequestCard {...request} />
 		{/each}
 	</div>
-    <div class="flex-1 h-96 sticky top-4"><DonutChart availableBudget={data.availableBudget} usedBudget={data.usedBudget} /></div>
+    <div class="flex-1 h-96 sticky top-20"><DonutChart availableBudget={data.availableBudget} usedBudget={data.usedBudget} /></div>
 </div>
