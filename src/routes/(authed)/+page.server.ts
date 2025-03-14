@@ -1,5 +1,5 @@
 import { db } from '$lib/server/db';
-import { trainingTable } from '../lib/server/db/schema';
+import { trainingTable } from '../../lib/server/db/schema';
 
 export const load = async () => {
 	const trainings = await db.select().from(trainingTable);
