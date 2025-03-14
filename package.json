@@ -39,6 +39,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"chart.js": "^4.4.8",
 		"daisyui": "^5.0.3",
 		"drizzle-orm": "^0.40.0",
 		"drizzle-seed": "^0.3.1",

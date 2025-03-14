@@ -1,8 +1,8 @@
 <script lang="ts">
-  import ConferenceCard from '../lib/components/ConferenceCard.svelte';
+	import ConferenceCard from '../lib/components/ConferenceCard.svelte';
 	import type { PageProps } from './$types';
 
-  let { data }: PageProps = $props();
+	let { data }: PageProps = $props();
 </script>
 
 <div class="container mx-auto p-4">
@@ -12,6 +12,5 @@
 		{#each data.trainings as conference}
 			<ConferenceCard {...conference} />
 		{/each}
-		}
 	</div>
 </div>

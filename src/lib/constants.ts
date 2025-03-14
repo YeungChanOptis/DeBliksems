@@ -1,0 +1,2 @@
+export const CONSULTANT_DAY_PRICE = 500;
+export const AVAILABLE_BUDGET = 4500;

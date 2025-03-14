@@ -7,7 +7,7 @@
   </div>
   <div class="flex-row gap-2  grow">
     <div class="flex gap-2">
-      <a class="btn btn-ghost" href="/request" >Request training</a>
+      <a class="btn btn-ghost" href="/requests" >My requests</a>
       <a class="btn btn-ghost" href="/overview">overview</a>
     </div>
    
