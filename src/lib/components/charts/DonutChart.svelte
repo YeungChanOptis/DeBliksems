@@ -6,7 +6,7 @@
 	export let availableBudget: number;
 	export let usedBudget: number = TOTAL_BUDGET - availableBudget;
 	const data: number[] = [availableBudget, usedBudget];
-	const labels: string[] = ['Free', 'Used'];
+	const labels: string[] = ['Available', 'Used'];
 	const backgroundColors: string[] = ['#303030', '#f2f2f2'];
 	const options: Chart.ChartOptions = {
 		cutout: '70%',

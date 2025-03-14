@@ -17,6 +17,7 @@ export const load = async () => {
 		})
 		.from(trainingRequestTable)
 		.leftJoin(trainingTable, eq(trainingRequestTable.trainingId, trainingTable.id))
+		//TODO:Change id
 		.where(eq(trainingRequestTable.userId, '6e97dea2-15c8-4195-6f80-a9ec395ac15c'));
 
 	const usedBudget = trainingRequests.reduce(

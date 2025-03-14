@@ -10,19 +10,10 @@
 	const formatDate = (date: string) => {
 		return new Date(date).toLocaleDateString();
 	};
-
-	const calculateDuration = () => {
-		const start = new Date(data.training.startDate);
-		const end = new Date(data.training.endDate);
-		const months =
-			(end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-		return months;
-	};
 </script>
 
 <div class="container mx-auto max-w-4xl px-4 py-8">
 	<div class="card bg-base-100 overflow-hidden shadow-xl">
-		<!-- Hero image -->
 		<figure class="relative h-64 w-full">
 			<img
 				src={image || '/placeholder.svg'}
@@ -33,7 +24,13 @@
 		</figure>
 
 		<div class="card-body">
-			<h1 class="card-title text-3xl font-bold">{data.training.name}</h1>
+			<div class="flex w-full items-center justify-between">
+				<h1 class="card-title text-3xl font-bold">{data.training.name}</h1>
+				<div class="w-fit">
+					<strong>Available budget:</strong>
+					<span class="text-green-500 text-lg">€{data.availableBudget}</span>
+				</div>
+			</div>
 
 			<div class="my-6 grid grid-cols-1 gap-4 md:grid-cols-3">
 				<div class="stat bg-base-200 rounded-box p-4">
@@ -57,7 +54,7 @@
 						<Euro class="h-6 w-6" />
 					</div>
 					<div class="stat-title">Price</div>
-					<div class="stat-value text-lg">€{data.training.price}</div>
+					<div class="stat-value text-lg">€{parseFloat(data.training.price).toFixed(2)}</div>
 				</div>
 			</div>
 
