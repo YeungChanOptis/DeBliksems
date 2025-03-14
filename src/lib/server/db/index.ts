@@ -31,7 +31,8 @@ await seed(db, {
 			durationDays: f.int({
 				minValue: 1,
 				maxValue: 4
-			})
-		},
+			}),
+			status: f.valuesFromArray({ values: ['PENDING', 'APPROVED', 'DENIED'] })
+		}
 	}
 }));

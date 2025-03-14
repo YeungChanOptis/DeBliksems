@@ -23,7 +23,9 @@ export const trainingTable = pgTable('training', {
 
 export type Training = typeof trainingTable.$inferSelect;
 
-const REQUEST_STATES = ['PENDING', 'APPROVED', 'DENIED'] as const;
+export const REQUEST_STATES = ['PENDING', 'APPROVED', 'DENIED'] as const;
+
+export type RequestState = typeof REQUEST_STATES[number];
 
 export const trainingRequestTable = pgTable('training_request', {
 	id: uuid('id').primaryKey().defaultRandom(),
