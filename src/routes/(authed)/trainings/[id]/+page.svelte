@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { daysBetween } from '$lib/utils/dateUtils';
 	import { Calendar, Euro } from 'lucide-svelte';
 	import type { PageProps } from './$types';
 	let { data }: PageProps = $props();
@@ -10,6 +11,11 @@
 	const formatDate = (date: string) => {
 		return new Date(date).toLocaleDateString();
 	};
+
+	let dialog: HTMLDialogElement;
+
+	const { startDate, endDate } = data.training;
+	const dayDiff = daysBetween(startDate, endDate);
 </script>
 
 <div class="container mx-auto max-w-4xl px-4 py-8">
@@ -28,7 +34,7 @@
 				<h1 class="card-title text-3xl font-bold">{data.training.name}</h1>
 				<div class="w-fit">
 					<strong>Available budget:</strong>
-					<span class="text-green-500 text-lg">€{data.availableBudget}</span>
+					<span class="text-lg text-green-500">€{data.availableBudget}</span>
 				</div>
 			</div>
 
@@ -72,8 +78,48 @@
 			</div>
 
 			<div class="card-actions mt-6 justify-end">
-				<button class="btn btn-primary">Request Attendance</button>
+				<button
+					onclick={() => dialog.showModal()}
+					class="btn btn-primary"
+					disabled={data.attending}
+				>
+					{#if data.attending}
+						Already attending training
+					{:else}
+						Request Attendance
+					{/if}
+				</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+<dialog bind:this={dialog} class="modal">
+	<div class="modal-box grid gap-2">
+		<span class="text-lg font-bold">Confirm attendance for "{data.training.name}"</span>
+		<form class="grid gap-2" action={'/trainings/' + data.training.id} method="post">
+			<div class="flex flex-col gap-1">
+				<label for="durationDays">How many days are you attending?</label>
+				<input
+					id="durationDays"
+					required
+					type="number"
+					class="input validator"
+					name="durationDays"
+					min="1"
+					max={dayDiff}
+				/>
+				<p class="validator-hint">Must be between 1 and {dayDiff}</p>
+			</div>
+			<div class="flex flex-col gap-1">
+				<label for="description">Comments</label>
+				<textarea id="description" class="textarea" name="description"></textarea>
+			</div>
+			<button class="btn btn-primary my-2">Confirm attendence</button>
+		</form>
+		<button
+			class="btn btn-sm btn-circle btn-ghost absolute top-2 right-2"
+			onclick={() => dialog.close()}>✕</button
+		>
+	</div>
+</dialog>
