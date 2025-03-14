@@ -45,6 +45,7 @@
 		"drizzle-orm": "^0.40.0",
 		"drizzle-seed": "^0.3.1",
 		"drizzle-zod": "^0.7.0",
+		"lucide-svelte": "^0.479.0",
 		"postgres": "^3.4.5",
 		"zod": "^3.24.2"
 	}

@@ -15,7 +15,7 @@
 	});
 </script>
 
-<div class="bg-base-200 min-h-screen py-8">
+<div class="min-h-screen py-8">
 	<div class="container mx-auto max-w-2xl px-4">
 		<div class="card bg-base-100 shadow-xl">
 			<div class="card-body">

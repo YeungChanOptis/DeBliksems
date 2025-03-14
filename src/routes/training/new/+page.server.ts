@@ -1,6 +1,6 @@
 import type { Actions, PageServerLoad } from './$types.js';
 
-import { superValidate, message } from 'sveltekit-superforms';
+import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { fail, redirect } from '@sveltejs/kit';
 import { schema } from './schema.js';

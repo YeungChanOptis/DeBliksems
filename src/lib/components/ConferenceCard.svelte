@@ -2,11 +2,12 @@
 	export let id: string;
 	export let name: string;
 	export let description: string | null;
-	export let date: string;
+	export let startDate: string;
+	export let endDate: string;
 	export let image: string;
 </script>
 
-<a class="card bg-base-100 m-4 w-96 shadow-xl hover:cursor-pointer" href="/training/{id}">
+<a class="card bg-base-100 m-4 w-96 shadow-xl hover:cursor-pointer" href="/trainings/{id}">
 	<figure>
 		<img src={image} alt={name} class="h-48 w-full object-cover" />
 	</figure>
@@ -28,7 +29,7 @@
 					d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
 				/>
 			</svg>
-			<span>{date}</span>
+			<span>{new Date(startDate).toLocaleDateString()} - {new Date(endDate).toLocaleDateString()}</span>
 		</div>
 		<div class="card-actions mt-4 justify-end">
 			<button
