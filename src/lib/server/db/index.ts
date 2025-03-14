@@ -12,4 +12,26 @@ export const db = drizzle(client, {
 });
 
 await reset(db, schema);
-await seed(db, { user: schema.userTable, training: schema.trainingTable });
+await seed(db, {
+	user: schema.userTable,
+	training: schema.trainingTable,
+	trainingRequest: schema.trainingRequestTable
+}).refine((f) => ({
+	training: {
+		columns: {
+			price: f.number({
+				minValue: 100,
+				maxValue: 1000,
+				precision: 2
+			})
+		}
+	},
+	trainingRequest: {
+		columns: {
+			durationDays: f.int({
+				minValue: 1,
+				maxValue: 4
+			})
+		},
+	}
+}));

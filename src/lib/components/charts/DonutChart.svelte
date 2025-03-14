@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Chart from 'chart.js/auto';
+	import { TOTAL_BUDGET } from '$lib/constants';
 
-	export let data: number[] = [50, 600];
-	export let labels: string[] = ['Free', 'Used'];
-	export let backgroundColors: string[] = ['#303030', '#f2f2f2'];
+	export let availableBudget: number;
+	export let usedBudget: number = TOTAL_BUDGET - availableBudget;
+	const data: number[] = [availableBudget, usedBudget];
+	const labels: string[] = ['Free', 'Used'];
+	const backgroundColors: string[] = ['#303030', '#f2f2f2'];
 	const options: Chart.ChartOptions = {
 		cutout: '70%',
 		plugins: {
@@ -14,6 +17,15 @@
 					color: '#333',
 					font: {
 						size: 14
+					}
+				}
+			},
+			tooltip: {
+				callbacks: {
+					label: function (context: any) {
+						const label = context.label || '';
+						const value = context.raw || 0;
+						return `${label}: €${value.toFixed(2)}`;
 					}
 				}
 			}
