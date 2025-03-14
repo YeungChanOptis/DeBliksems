@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, decimal, date } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, text, decimal, date, timestamp } from 'drizzle-orm/pg-core';
 
 const ROLES = ['USER', 'ADMIN'] as const;
 
@@ -8,7 +8,8 @@ export const userTable = pgTable('user', {
 	lastName: text('last_name').notNull(),
 	email: text('email').notNull(),
 	remainingBudget: decimal('remaining_budget').notNull(),
-	role: text('role', { enum: ROLES }).notNull()
+	role: text('role', { enum: ROLES }).notNull(),
+	passwordHash: text('password_hash').notNull()
 });
 
 export type User = typeof userTable.$inferSelect;
@@ -50,3 +51,14 @@ export const costTable = pgTable('cost', {
 });
 
 export type Cost = typeof costTable.$inferSelect;
+
+export const sessionTable = pgTable('session', {
+	id: text('id').primaryKey(),
+	userId: uuid('user_id')
+		.notNull()
+		.references(() => userTable.id),
+	expiresAt: timestamp('expires_at', {
+		withTimezone: true,
+		mode: 'date'
+	}).notNull()
+});
