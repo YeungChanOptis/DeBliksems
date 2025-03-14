@@ -18,6 +18,37 @@ export const db = drizzle(client, {
 export const adapter = new DrizzlePostgreSQLAdapter(db, schema.sessionTable, schema.userTable);
 
 await reset(db, schema);
+
+
+const hashedDummyPw = await hash(env.DUMMY_PW, {
+	memoryCost: 19456,
+	timeCost: 2,
+	outputLen: 32,
+	parallelism: 1
+});
+
+await db.insert(schema.userTable).values([
+	{
+		id: 'd08127ed-083f-4f39-82d1-185d108f3c23',
+		firstName: 'test',
+		lastName: 'tester',
+		email: 'test@mail.be',
+		passwordHash: hashedDummyPw,
+		remainingBudget: '4500',
+		role: 'USER'
+	},
+	{
+		id: '1b5bf7b3-e1a4-45d1-a739-c7b5663c06ae',
+		firstName: 'admin',
+		lastName: 'admin',
+		email: 'admin@mail.be',
+		passwordHash: hashedDummyPw,
+		remainingBudget: '4500',
+		role: 'ADMIN'
+	}
+]);
+
+
 await seed(db, {
 	training: schema.trainingTable,
 	trainingRequest: schema.trainingRequestTable
@@ -41,6 +72,9 @@ await seed(db, {
 	},
 	trainingRequest: {
 		columns: {
+			userId: f.valuesFromArray({
+				values: ['d08127ed-083f-4f39-82d1-185d108f3c23', '1b5bf7b3-e1a4-45d1-a739-c7b5663c06ae']
+			}),
 			durationDays: f.int({
 				minValue: 1,
 				maxValue: 4
@@ -49,31 +83,3 @@ await seed(db, {
 		}
 	}
 }));
-
-const hashedDummyPw = await hash(env.DUMMY_PW, {
-	memoryCost: 19456,
-	timeCost: 2,
-	outputLen: 32,
-	parallelism: 1
-});
-
-await db.insert(schema.userTable).values([
-	{
-		id: crypto.randomUUID(),
-		firstName: 'test',
-		lastName: 'tester',
-		email: 'test@mail.be',
-		passwordHash: hashedDummyPw,
-		remainingBudget: '4500',
-		role: 'USER'
-	},
-	{
-		id: crypto.randomUUID(),
-		firstName: 'admin',
-		lastName: 'admin',
-		email: 'admin@mail.be',
-		passwordHash: hashedDummyPw,
-		remainingBudget: '4500',
-		role: 'ADMIN'
-	}
-]);

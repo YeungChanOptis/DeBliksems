@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import { TOTAL_BUDGET } from '$lib/constants';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
 	const training = await db.select().from(trainingTable).where(eq(trainingTable.id, params.id));
 
 	const trainingRequests = await db
@@ -20,8 +20,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		})
 		.from(trainingRequestTable)
 		.leftJoin(trainingTable, eq(trainingRequestTable.trainingId, trainingTable.id))
-		//TODO:Change id
-		.where(eq(trainingRequestTable.userId, '6e97dea2-15c8-4195-6f80-a9ec395ac15c'));
+		.where(eq(trainingRequestTable.userId, locals.user!.id));
 
 	const usedBudget = trainingRequests.reduce(
 		(acc, { durationDays, ticketCost }) =>

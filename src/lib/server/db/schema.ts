@@ -26,8 +26,10 @@ export const trainingTable = pgTable('training', {
 export type Training = typeof trainingTable.$inferSelect;
 
 export const REQUEST_STATES = ['PENDING', 'APPROVED', 'DENIED'] as const;
+export type RequestState = (typeof REQUEST_STATES)[number];
 
-export type RequestState = typeof REQUEST_STATES[number];
+export const COST_STATES = ['PENDING', 'APPROVED', 'DENIED'] as const;
+export type CostState = (typeof COST_STATES)[number];
 
 export const trainingRequestTable = pgTable('training_request', {
 	id: uuid('id').primaryKey().defaultRandom(),
@@ -47,7 +49,9 @@ export const costTable = pgTable('cost', {
 	name: text('name').notNull(),
 	amount: decimal('amount').notNull(),
 	type: text('type', { enum: COST_TYPES }).notNull(),
-	trainingRequestId: uuid('training_request_id').references(() => trainingRequestTable.id)
+	trainingRequestId: uuid('training_request_id').references(() => trainingRequestTable.id),
+	description: text('description'),
+	status: text('status', { enum: COST_STATES })
 });
 
 export type Cost = typeof costTable.$inferSelect;
