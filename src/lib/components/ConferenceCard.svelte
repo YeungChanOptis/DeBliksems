@@ -1,11 +1,12 @@
 <script lang="ts">
+	export let id: string;
 	export let name: string;
 	export let description: string | null;
 	export let date: string;
 	export let image: string;
 </script>
 
-<div class="card bg-base-100 m-4 w-96 shadow-xl">
+<a class="card bg-base-100 m-4 w-96 shadow-xl hover:cursor-pointer" href="/training/{id}">
 	<figure>
 		<img src={image} alt={name} class="h-48 w-full object-cover" />
 	</figure>
@@ -30,9 +31,15 @@
 			<span>{date}</span>
 		</div>
 		<div class="card-actions mt-4 justify-end">
-			<button class="btn btn-primary" on:click={() => alert(`Requesting attendance for ${name}`)}>
+			<button
+				class="btn btn-primary"
+				on:click={(event) => {
+					event.preventDefault();
+					alert(`Requesting attendance for ${name}`);
+				}}
+			>
 				Request Attendance
 			</button>
 		</div>
 	</div>
-</div>
+</a>
