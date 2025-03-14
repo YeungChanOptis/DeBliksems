@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ConferenceCard from '../lib/components/ConferenceCard.svelte';
+	import ConferenceCard from '../../lib/components/ConferenceCard.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
