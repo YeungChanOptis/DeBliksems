@@ -16,7 +16,8 @@ export type User = typeof userTable.$inferSelect;
 export const trainingTable = pgTable('training', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	name: text('name').notNull(),
-	date: date('date', { mode: 'string' }).notNull(),
+	startDate: date('startDate', { mode: 'string' }).notNull(),
+	endDate: date('endDate', { mode: 'string' }).notNull(),
 	description: text('description'),
 	price: decimal('price').notNull()
 });
