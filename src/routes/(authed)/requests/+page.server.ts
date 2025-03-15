@@ -12,6 +12,7 @@ import { schema } from './schema';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
 	const userId = locals.user!.id;
+	const CONSULTANT_DAY_COST = 500;
 
 	const trainingRequests = await db
 		.select({
@@ -37,12 +38,13 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		.groupBy(trainingRequestTable.id, trainingTable.price, trainingTable.name);
 
 	const ticketBudget = trainingRequests
-		.filter((request) => request.status != REQUEST_STATES[2])
-		.reduce(
-			(total, { durationDays, ticketCost }) =>
-				total + (parseFloat(durationDays) * 500 + (ticketCost ? Number(ticketCost) : 0)),
-			0
-		);
+		.filter((request) => request.status === REQUEST_STATES[1])
+		.reduce((total, { ticketCost }) => total += Number(ticketCost), 0);
+
+
+	const internalDaysBudget = trainingRequests
+		.filter((request) => request.status === REQUEST_STATES[1])
+		.reduce((total, { durationDays }) => total += parseFloat(durationDays) * CONSULTANT_DAY_COST, 0);
 
 	const costs = await db.select({
 		id: costTable.id,
@@ -65,6 +67,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 	}, {});
 
 	totalsPerType['Ticket'] = ticketBudget;
+	totalsPerType['Internal Days'] = internalDaysBudget;
 
 
 	const availableBudget = Object.values(totalsPerType).reduce((total, cost) => total -= cost, TOTAL_BUDGET);
