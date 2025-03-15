@@ -1,54 +1,53 @@
 <script lang="ts">
-    import {afterUpdate, onMount} from 'svelte';
-	import Chart from 'chart.js/auto';
-    import {effect} from "zod";
+    import {onMount} from 'svelte';
+    import Chart from 'chart.js/auto';
 
-    export let totalsPerType: {[key: string]: number};
+    export let totalsPerType: { [key: string]: number };
 
-	const backgroundColors: string[] = ['#303030', '#f2f2f2', '#aaf2f2', '#ccf2cc', '#f25552', '#f2f15f'];
-	const options: Chart.ChartOptions = {
-		cutout: '70%',
-		plugins: {
-			legend: {
-				position: 'bottom',
-				labels: {
-					color: '#333',
-					font: {
-						size: 14
-					}
-				}
-			},
-			tooltip: {
-				callbacks: {
-					label: function (context: any) {
-						const label = context.label || '';
-						const value = context.raw || 0;
-						return `${label}: €${value.toFixed(2)}`;
-					}
-				}
-			}
-		}
-	};
+    const backgroundColors: string[] = ['#303030', '#f2f2f2', '#aaf2f2', '#ccf2cc', '#f25552', '#f2f15f'];
+    const options: Chart.ChartOptions = {
+        cutout: '70%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    color: '#333',
+                    font: {
+                        size: 14
+                    }
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function (context: any) {
+                        const label = context.label || '';
+                        const value = context.raw || 0;
+                        return `${label}: €${value.toFixed(2)}`;
+                    }
+                }
+            }
+        }
+    };
 
-	let chart: Chart | undefined;
-	let canvas: HTMLCanvasElement | null = null;
+    let chart: Chart | undefined;
+    let canvas: HTMLCanvasElement | null = null;
 
-	const centerTextPlugin = {
-		id: 'centerText',
-		afterDraw(chart: Chart) {
-			const {
-				ctx,
-				chartArea: { width, height }
-			} = chart;
-			ctx.save();
-			ctx.font = '20px Arial';
-			ctx.fillStyle = '#000';
-			ctx.textAlign = 'center';
-			ctx.textBaseline = 'middle';
-			ctx.fillText('Budget', width / 2, height / 2);
-			ctx.restore();
-		}
-	};
+    const centerTextPlugin = {
+        id: 'centerText',
+        afterDraw(chart: Chart) {
+            const {
+                ctx,
+                chartArea: {width, height}
+            } = chart;
+            ctx.save();
+            ctx.font = '20px Arial';
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Budget', width / 2, height / 2);
+            ctx.restore();
+        }
+    };
 
     function updateChart() {
         if (canvas) {
@@ -59,7 +58,7 @@
             chart = new Chart(canvas, {
                 type: 'doughnut',
                 data: {
-                    labels:  Object.keys(totalsPerType),
+                    labels: Object.keys(totalsPerType),
                     datasets: [
                         {
                             data: Object.values(totalsPerType),
@@ -83,14 +82,13 @@
     $: {
         if (totalsPerType) {
             updateChart();
-            console.log('new data', totalsPerType)
         }
     }
 
 
-	onMount(() => {
+    onMount(() => {
         updateChart();
-	});
+    });
 
 
 </script>
