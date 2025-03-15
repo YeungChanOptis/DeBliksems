@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import { enhance } from '$app/forms';
 
 	let { form } = $props();
@@ -31,13 +30,12 @@
 								<span class="label-text-alt text-error">{errors.name}</span>{/if}
 						</label>
 						<input
-							class="input input-bordered  w-full"
+							class="input input-bordered w-full"
 							placeholder="Enter conference name"
 							name="name"
 							aria-invalid={errors.name ? 'true' : undefined}
 						/>
 					</div>
-
 
 					<div class="form-control">
 						<label class="fieldset-label">
@@ -46,14 +44,16 @@
 								<span class="label-text-alt text-error">{errors.price}</span>{/if}
 						</label>
 						<input
-							class="input input-bordered  w-full"
+							class="input input-bordered w-full"
 							placeholder="Ticket price"
 							name="price"
-							type="number" min="0.00" max="10000.00" step="0.01" 
+							type="number"
+							min="0.00"
+							max="10000.00"
+							step="0.01"
 							aria-invalid={errors.price ? 'true' : undefined}
 						/>
 					</div>
-
 
 					<div class="form-control">
 						<label class="fieldset-label">
@@ -63,49 +63,46 @@
 							{/if}
 						</label>
 						<input
-							class="textarea textarea-bordered  h-32"
+							class="textarea textarea-bordered h-32 w-full"
 							placeholder="Enter conference description"
 							name="description"
 							aria-invalid={errors.description ? 'true' : undefined}
 						/>
 					</div>
 
-          <div class="flex gap-6">
+					<div class="flex gap-6">
+						<div class="form-control flex gap-6">
+							<label class="fieldset-label">
+								From
+								{#if errors.startDate}
+									<span class="label-text-alt text-error">{errors.startDate}</span>
+								{/if}
+							</label>
+							<input
+								class="input"
+								type="date"
+								placeholder="Enter conference start date"
+								name="startDate"
+								aria-invalid={errors.startDate ? 'true' : undefined}
+							/>
+						</div>
 
-					<div class="form-control flex gap-6">
-						<label class="fieldset-label">
-							From
-							{#if errors.startDate}
-								<span class="label-text-alt text-error">{errors.startDate}</span>
-							{/if}
-						</label>
-						<input
-							class="input"
-							type="date"
-							placeholder="Enter conference start date"
-							name="startDate"
-							aria-invalid={errors.startDate ? 'true' : undefined}
-						/>
+						<div class="form-control flex gap-6">
+							<label class="fieldset-label">
+								to
+								{#if errors.endDate}
+									<span class="label-text-alt text-error">{errors.endDate}</span>
+								{/if}
+							</label>
+							<input
+								class="input"
+								type="date"
+								placeholder="Enter conference end date"
+								name="endDate"
+								aria-invalid={errors.endDate ? 'true' : undefined}
+							/>
+						</div>
 					</div>
-
-
-					<div class="form-control flex gap-6">
-						<label class="fieldset-label">
-							to
-							{#if errors.endDate}
-								<span class="label-text-alt text-error">{errors.endDate}</span>
-							{/if}
-						</label>
-						<input
-							class="input"
-							type="date"
-							placeholder="Enter conference end date"
-							name="endDate"
-							aria-invalid={errors.endDate ? 'true' : undefined}
-						/>
-					</div>
-          </div>
-
 
 					<button class="btn btn-success">Submit</button>
 				</form>

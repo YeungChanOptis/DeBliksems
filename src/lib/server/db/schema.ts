@@ -42,7 +42,7 @@ export const trainingRequestTable = pgTable('training_request', {
 
 export type TrainingRequest = typeof trainingRequestTable.$inferSelect;
 
-const COST_TYPES = ['Transport', 'Accomodation', 'Internal Days', 'Other'] as const;
+export const COST_TYPES = ['Transport', 'Accomodation', 'Internal Days', 'Other'] as const;
 
 export const costTable = pgTable('cost', {
 	id: uuid('id').primaryKey().defaultRandom(),
