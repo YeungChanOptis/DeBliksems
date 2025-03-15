@@ -5,4 +5,5 @@ export const load: LayoutServerLoad = ({ locals }) => {
 	if (!locals.user) {
 		redirect(307, '/sign-in');
 	}
+	return {user : locals.user}
 };

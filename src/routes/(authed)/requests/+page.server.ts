@@ -2,7 +2,7 @@ import { TOTAL_BUDGET } from '$lib/constants';
 import { db } from '$lib/server/db';
 import { costTable, trainingRequestTable, trainingTable, userTable } from '$lib/server/db/schema';
 import { redirect } from '@sveltejs/kit';
-import { eq, sql } from 'drizzle-orm';
+import { eq, inArray, sql } from 'drizzle-orm';
 import { createInsertSchema } from 'drizzle-zod';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -36,7 +36,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		.where(eq(trainingRequestTable.userId, userId))
 		.groupBy(trainingRequestTable.id, trainingTable.price, trainingTable.name);
 
-	const usedBudget = trainingRequests
+	const ticketBudget = trainingRequests
 		.filter((request) => request.status != REQUEST_STATES[2])
 		.reduce(
 			(total, { durationDays, ticketCost }) =>
@@ -44,9 +44,33 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 			0
 		);
 
-	const availableBudget = TOTAL_BUDGET - usedBudget;
-	
-	return { trainingRequests, availableBudget, usedBudget };
+	const costs = await db.select({
+		id: costTable.id,
+		amount: costTable.amount,
+		type: costTable.type
+	})
+		.from(costTable)
+		.leftJoin(trainingRequestTable, eq(trainingRequestTable.id, costTable.trainingRequestId))
+		.where(inArray(trainingRequestTable.trainingId, trainingRequests.map(request => request.trainingId)));
+
+
+	const totalsPerType: {[key: string]: number} = costs.reduce((total, cost) => {
+		if (!total[cost.type]) {
+			total[cost.type] = 0;
+		}
+
+		total[cost.type] += parseFloat(cost.amount.toString());
+
+		return total;
+	}, {});
+
+	totalsPerType['Ticket'] = ticketBudget;
+
+
+	const availableBudget = Object.values(totalsPerType).reduce((total, cost) => total -= cost, TOTAL_BUDGET);
+	totalsPerType['Available'] = availableBudget;
+	const usedBudget = Object.values(totalsPerType).reduce((total, cost) =>  total += cost, 0);
+	return { trainingRequests, availableBudget, totalsPerType, usedBudget };
 };
 
 export const actions: Actions = {
@@ -63,3 +87,4 @@ export const actions: Actions = {
 		return redirect(303, '/requests');
 	}
 };
+

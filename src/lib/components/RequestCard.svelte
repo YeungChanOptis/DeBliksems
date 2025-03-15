@@ -3,6 +3,7 @@
 	import { CONSULTANT_DAY_PRICE } from '$lib/constants';
 	import type { Cost } from '$lib/server/db/schema';
 	import { Plus } from 'lucide-svelte';
+	
 
 	export let id: string;
 	export let ticketCost: string | null;

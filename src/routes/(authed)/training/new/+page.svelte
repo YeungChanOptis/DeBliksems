@@ -3,7 +3,6 @@
 
 	let { form } = $props();
 
-	let message = $derived(form?.form?.message);
 	let errors = $derived(form?.form?.errors ?? {});
 
 	$effect(() => {
