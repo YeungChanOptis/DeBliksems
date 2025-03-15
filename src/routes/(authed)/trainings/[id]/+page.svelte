@@ -90,6 +90,27 @@
 					{/if}
 				</button>
 			</div>
+
+			<div>
+				<span class="divider text-lg">People attendening</span>
+				{#if data.attendees.length}
+					<ul class="my-2">
+						{#each data.attendees as attendee}
+							<div>
+								<span
+									>{attendee.firstName}
+									{attendee.lastName}
+									{#if attendee.days}
+										({attendee.days} days)
+									{/if}</span
+								>
+							</div>
+						{/each}
+					</ul>
+				{:else}
+					No one is attending yet.
+				{/if}
+			</div>
 		</div>
 	</div>
 </div>

@@ -1,5 +1,5 @@
 import { db } from '$lib/server/db';
-import { trainingRequestTable, trainingTable } from '$lib/server/db/schema';
+import { trainingRequestTable, trainingTable, userTable } from '$lib/server/db/schema';
 import { and, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import { TOTAL_BUDGET } from '$lib/constants';
@@ -44,10 +44,25 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		0
 	);
 
-	const userTrainingRequest = await getTrainingRequest(user.id, params.id);
+	const attendees = await db
+		.select({
+			userId: userTable.id,
+			firstName: userTable.firstName,
+			lastName: userTable.lastName,
+			days: trainingRequestTable.durationDays
+		})
+		.from(userTable)
+		.leftJoin(trainingRequestTable, eq(trainingRequestTable.userId, userTable.id))
+		.where(eq(trainingRequestTable.trainingId, params.id));
 
 	const availableBudget = TOTAL_BUDGET - usedBudget;
-	return { training: training[0], availableBudget, attending: userTrainingRequest !== null };
+	
+	return {
+		training: training[0],
+		availableBudget,
+		attendees,
+		attending: Boolean(attendees.find((attendee) => attendee.userId))
+	};
 };
 
 async function getTraining(id: string) {
