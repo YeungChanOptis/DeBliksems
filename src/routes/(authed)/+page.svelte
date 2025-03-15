@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Plus } from 'lucide-svelte';
 	import ConferenceCard from '../../lib/components/ConferenceCard.svelte';
 	import type { PageProps } from './$types';
 
@@ -7,7 +8,7 @@
 
 <div class="flex">
 	<h1 class=" mb-8 grow text-center text-4xl font-bold">Upcoming Developer Conferences</h1>
-	<a class="btn btn-success" href="training/new">Create new event</a>
+	<a class="btn btn-success text-white" href="training/new"><Plus />Create new event</a>
 </div>
 
 <div class="flex flex-wrap justify-center gap-4">
