@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { CONSULTANT_DAY_PRICE } from '$lib/constants';
+	import type { Cost } from '$lib/server/db/schema';
 	import { Plus } from 'lucide-svelte';
 
 	export let id: string;
@@ -8,10 +9,20 @@
 	export let durationDays: string;
 	export let trainingName: string | null;
 	export let status: string | null;
+	export let costs: Cost[];
+	let costsTotal = costs.reduce((acc, cost) => acc + parseFloat(cost.amount), 0);
+	let additionalCostsTotal = costsTotal ? parseFloat(costsTotal.toFixed(2)) : 0;
+
+	$: {
+		if (costs) {
+			costsTotal = costs.reduce((acc, cost) => acc + parseFloat(cost.amount), 0);
+			additionalCostsTotal = costsTotal ? parseFloat(costsTotal.toFixed(2)) : 0;
+		}
+	}
 
 	const parsedTicketCost = ticketCost ? parseFloat(ticketCost) : 0;
 	const resultingCost = CONSULTANT_DAY_PRICE * parseFloat(durationDays);
-	const estimatedCost = parsedTicketCost + resultingCost;
+	const estimatedCost = parsedTicketCost + resultingCost + additionalCostsTotal;
 
 	const STATUS_MAP: Record<string, { text: string; color: string }> = {
 		PENDING: { text: 'Pending', color: 'badge-warning' },
@@ -52,6 +63,10 @@
 				>{`${durationDays} days (resulting cost = €${resultingCost.toFixed(2)})`}</span
 			>
 		</p>
+		<p class="text-gray-600">
+			<strong>Additional expenses:</strong>
+			<span class="text-gray-800">€{additionalCostsTotal.toFixed(2)}</span>
+		</p>
 		<hr class="border-gray-300" />
 		<div class="flex items-center justify-between text-lg text-gray-800">
 			💰 Estimated Cost: €{estimatedCost.toFixed(2)}
@@ -82,12 +97,6 @@
 								<option value={costType}>{costType}</option>
 							{/each}
 						</select>
-						<input
-							name="description"
-							type="text"
-							placeholder="Expense description"
-							class="input input-bordered mb-4 w-full"
-						/>
 						<input
 							name="amount"
 							type="number"

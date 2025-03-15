@@ -3,7 +3,7 @@
 	import DonutChart from '$lib/components/charts/DonutChart.svelte';
 	import type { PageProps } from './$types';
 
-    let { data }: PageProps = $props();
+	let { data }: PageProps = $props();
 </script>
 
 <h1 class="mb-8 text-4xl font-bold">My requests</h1>
@@ -13,5 +13,7 @@
 			<RequestCard {...request} />
 		{/each}
 	</div>
-    <div class="flex-1 h-96 sticky top-20"><DonutChart availableBudget={data.availableBudget} usedBudget={data.usedBudget} /></div>
+	<div class="sticky top-20 h-96 flex-1">
+		<DonutChart availableBudget={data.availableBudget} usedBudget={data.usedBudget} />
+	</div>
 </div>
