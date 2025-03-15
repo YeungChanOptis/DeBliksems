@@ -15,11 +15,7 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default: async ({ request }) => {
 		const form = await superValidate(request, zod(schema));
-		console.log(form);
-
 		if (!form.valid) return fail(400, { form });
-		console.log('form is valid, persisting.....', JSON.stringify(form.data));
-
 		const trainingTableInsertSchema = createInsertSchema(trainingTable);
 		const parsed = trainingTableInsertSchema.parse(form.data);
 		await db.insert(trainingTable).values(parsed);

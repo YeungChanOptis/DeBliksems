@@ -2,13 +2,14 @@
 	import { enhance } from '$app/forms';
 	import { CONSULTANT_DAY_PRICE } from '$lib/constants';
 	import { Plus } from 'lucide-svelte';
+	
 
 	export let id: string;
 	export let ticketCost: string | null;
 	export let durationDays: string;
 	export let trainingName: string | null;
 	export let status: string | null;
-
+	
 	const parsedTicketCost = ticketCost ? parseFloat(ticketCost) : 0;
 	const resultingCost = CONSULTANT_DAY_PRICE * parseFloat(durationDays);
 	const estimatedCost = parsedTicketCost + resultingCost;

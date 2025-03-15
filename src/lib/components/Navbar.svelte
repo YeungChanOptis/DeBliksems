@@ -1,14 +1,22 @@
 <script lang="ts">
+	export let user;
 </script>
 
 <div class="navbar bg-base-100 sticky top-0 z-50 flex-row justify-between gap-4 shadow-lg">
 	<div class="">
 		<a class="btn btn-ghost text-xl" href="/">Training budget manager</a>
 	</div>
-	<div class="grow flex-row gap-2">
+
+	<div class="flex grow gap-2">
 		<div class="flex gap-2">
 			<a class="btn btn-ghost" href="/requests">My requests</a>
 		</div>
+
+		{#if user}
+			<div class="flex gap-2">
+				<a class="btn btn-ghost" href="/admin">Open requests</a>
+			</div>
+		{/if}
 	</div>
 	<div class="dropdown dropdown-end">
 		<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
