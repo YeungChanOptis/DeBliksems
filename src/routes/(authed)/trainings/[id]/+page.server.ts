@@ -111,6 +111,6 @@ export const actions: Actions = {
 			trainingId
 		});
 
-		redirect(303, '/');
+		redirect(303, '/requests');
 	}
 };
