@@ -77,20 +77,6 @@
 				</button>
 			</div>
 
-			<div class="card-actions mt-6 justify-end">
-				<button
-					onclick={() => dialog.showModal()}
-					class="btn btn-primary"
-					disabled={data.attending}
-				>
-					{#if data.attending}
-						Already attending training
-					{:else}
-						Request Attendance
-					{/if}
-				</button>
-			</div>
-
 			<div>
 				<span class="divider text-lg">People attendening</span>
 				{#if data.attendees.length}
@@ -111,6 +97,19 @@
 					No one is attending yet.
 				{/if}
 			</div>
+			<div class="card-actions mt-6 justify-end">
+				<button
+					onclick={() => dialog.showModal()}
+					class="btn btn-primary"
+					disabled={data.attending}
+				>
+					{#if data.attending}
+						Already attending training
+					{:else}
+						Request Attendance
+					{/if}
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -119,7 +118,7 @@
 	<div class="modal-box grid gap-2">
 		<span class="text-lg font-bold">Confirm attendance for "{data.training.name}"</span>
 		<form class="grid gap-2" action={'/trainings/' + data.training.id} method="post">
-			<div class="flex flex-col gap-1 w-full">
+			<div class="flex w-full flex-col gap-1">
 				<label for="durationDays">How many days are you attending?</label>
 				<input
 					id="durationDays"
@@ -132,7 +131,7 @@
 				/>
 				<p class="validator-hint">Must be between 1 and {dayDiff}</p>
 			</div>
-			<div class="flex flex-col gap-1 w-full">
+			<div class="flex w-full flex-col gap-1">
 				<label for="description">Comments</label>
 				<textarea id="description" class="textarea w-full" name="description"></textarea>
 			</div>
