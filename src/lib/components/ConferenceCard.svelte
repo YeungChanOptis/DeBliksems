@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { PersonStanding, User } from 'lucide-svelte';
+
 	export let id: string;
 	export let name: string;
 	export let description: string | null;
 	export let startDate: string;
 	export let endDate: string;
 	export let image: string;
+	export let attendeeCount: number;
 </script>
 
 <a class="card bg-base-100 m-4 w-96 shadow-xl hover:cursor-pointer" href="/trainings/{id}">
@@ -32,6 +35,10 @@
 			<span
 				>{new Date(startDate).toLocaleDateString()} - {new Date(endDate).toLocaleDateString()}</span
 			>
+		</div>
+		<div class="flex items-center gap-1">
+			<User />
+			{attendeeCount}
 		</div>
 	</div>
 </a>
