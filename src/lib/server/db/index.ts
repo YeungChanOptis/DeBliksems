@@ -1,13 +1,26 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
 import * as schema from './schema';
 import { env } from '$env/dynamic/private';
-import { seed, reset } from 'drizzle-seed';
-import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
-import { hash } from '@node-rs/argon2';
+import {reset, seed} from 'drizzle-seed';
+import postgres from 'postgres';
+import {hash} from "@node-rs/argon2";
+import {DrizzlePostgreSQLAdapter} from "@lucia-auth/adapter-drizzle";
+import {COST_TYPES} from "./schema";
 
-if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
-if (!env.DUMMY_PW) throw new Error('DUMMY PW not set');
+// // Uncomment for deployed AWS db
+// export const db = drizzle({
+//     connection: {
+//         host: 'stages-db-instance.cmwzelbl6g4t.eu-west-1.rds.amazonaws.com',
+//         port: 5432,
+//         password: 'stormvogels123',
+//         user: 'postgres',
+//         database: 'de-bliksems',
+//         ssl: {
+//             rejectUnauthorized: false
+//         }
+//     },
+// schema
+// });
 
 const client = postgres(env.DATABASE_URL);
 
@@ -18,7 +31,6 @@ export const db = drizzle(client, {
 export const adapter = new DrizzlePostgreSQLAdapter(db, schema.sessionTable, schema.userTable);
 
 await reset(db, schema);
-
 
 const hashedDummyPw = await hash(env.DUMMY_PW, {
 	memoryCost: 19456,
@@ -65,7 +77,7 @@ await seed(db, {
 			}),
 			price: f.number({
 				minValue: 100,
-				maxValue: 1000,
+				maxValue: 300,
 				precision: 2
 			})
 		}
@@ -80,6 +92,30 @@ await seed(db, {
 				maxValue: 4
 			}),
 			status: f.valuesFromArray({ values: ['PENDING', 'APPROVED', 'DENIED'] })
+		}
+	}
+}));
+
+const trainingRequests = await db
+	.select({
+		id: schema.trainingRequestTable.id,
+	})
+	.from(schema.trainingRequestTable);
+
+await seed(db, {
+	cost: schema.costTable
+}).refine((f) => ({
+	cost: {
+		columns: {
+			trainingRequestId:
+				f.valuesFromArray({values: trainingRequests.map(r => r.id)}),
+			type:
+				f.valuesFromArray({values: COST_TYPES}),
+			amount: f.number({
+				minValue: 1,
+				maxValue: 50,
+				precision: 2
+			}),
 		}
 	}
 }));

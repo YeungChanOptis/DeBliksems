@@ -13,5 +13,16 @@
 			<RequestCard {...request} />
 		{/each}
 	</div>
-    <div class="flex-1 h-96 sticky top-20"><DonutChart availableBudget={data.availableBudget} usedBudget={data.usedBudget} /></div>
+    <div class="flex-1 h-96 sticky top-20 flex flex-col items-center">
+		<h3 class="text-center text-3xl font-bold mb-4 {data.availableBudget < 0 ? 'negative' : ''}">
+			Remaining budget: {data.availableBudget < 0 ? `-€${Math.abs(data.availableBudget)}` : `€${data.availableBudget}`}
+		</h3>
+		<DonutChart totalsPerType={data.totalsPerType} class="text-centerD"/>
+	</div>
 </div>
+
+<style>
+	.negative {
+		color: #650909;
+	}
+</style>

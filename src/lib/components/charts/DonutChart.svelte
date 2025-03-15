@@ -1,13 +1,11 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+    import {afterUpdate, onMount} from 'svelte';
 	import Chart from 'chart.js/auto';
-	import { TOTAL_BUDGET } from '$lib/constants';
+    import {effect} from "zod";
 
-	export let availableBudget: number;
-	export let usedBudget: number = TOTAL_BUDGET - availableBudget;
-	const data: number[] = [availableBudget, usedBudget];
-	const labels: string[] = ['Available', 'Used'];
-	const backgroundColors: string[] = ['#303030', '#f2f2f2'];
+    export let totalsPerType: {[key: string]: number};
+
+	const backgroundColors: string[] = ['#303030', '#f2f2f2', '#aaf2f2', '#ccf2cc', '#f25552', '#f2f15f'];
 	const options: Chart.ChartOptions = {
 		cutout: '70%',
 		plugins: {
@@ -52,31 +50,49 @@
 		}
 	};
 
-	onMount(() => {
-		if (canvas) {
-			chart = new Chart(canvas, {
-				type: 'doughnut',
-				data: {
-					labels: labels,
-					datasets: [
-						{
-							data: data,
-							backgroundColor: backgroundColors,
-							borderColor: '#fff',
-							borderWidth: 1,
-							borderRadius: 3
-						}
-					]
-				},
-				options: options,
-				plugins: [centerTextPlugin]
-			});
-		}
+    function updateChart() {
+        if (canvas) {
+            if (chart) {
+                chart.destroy();
+            }
 
-		return () => {
-			chart?.destroy();
-		};
+            chart = new Chart(canvas, {
+                type: 'doughnut',
+                data: {
+                    labels:  Object.keys(totalsPerType),
+                    datasets: [
+                        {
+                            data: Object.values(totalsPerType),
+                            backgroundColor: backgroundColors,
+                            borderColor: '#fff',
+                            borderWidth: 1,
+                            borderRadius: 3
+                        }
+                    ]
+                },
+                options: options,
+                plugins: [centerTextPlugin]
+            });
+        }
+
+        return () => {
+            chart?.destroy();
+        };
+    }
+
+    $: {
+        if (totalsPerType) {
+            updateChart();
+            console.log('new data', totalsPerType)
+        }
+    }
+
+
+	onMount(() => {
+        updateChart();
 	});
+
+
 </script>
 
 <canvas bind:this={canvas}></canvas>
