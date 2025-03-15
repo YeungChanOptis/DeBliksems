@@ -103,7 +103,9 @@
 						</div>
 					</div>
 
-					<button class="btn btn-success">Submit</button>
+					<div class="w-fit ml-auto">
+						<button class="btn btn-primary text-white">Submit</button>
+					</div>
 				</form>
 			</div>
 		</div>

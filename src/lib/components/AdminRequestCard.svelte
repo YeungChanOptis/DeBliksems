@@ -55,11 +55,11 @@
 			<div class="flex gap-4">
 				<form method="POST" id={`${id}-decline`} action="?/decline" use:enhance>
 					<input type="hidden" name="id" id="id" value={id}>
-					 <button type="submit"  class="btn btn-error">Decline</button>
+					 <button type="submit"  class="btn btn-error text-white">Decline</button>
 				</form>
 				<form method="POST" id={`${id}-accept`} action="?/accept" use:enhance>
 					<input type="hidden" name="id" id="id" value={id}>
-					<button class="btn btn-success">Approve</button>
+					<button class="btn btn-success text-white">Approve</button>
 				</form>
 			</div>	
 		</div>

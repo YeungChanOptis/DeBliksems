@@ -119,22 +119,22 @@
 	<div class="modal-box grid gap-2">
 		<span class="text-lg font-bold">Confirm attendance for "{data.training.name}"</span>
 		<form class="grid gap-2" action={'/trainings/' + data.training.id} method="post">
-			<div class="flex flex-col gap-1">
+			<div class="flex flex-col gap-1 w-full">
 				<label for="durationDays">How many days are you attending?</label>
 				<input
 					id="durationDays"
 					required
 					type="number"
-					class="input validator"
+					class="input validator w-full"
 					name="durationDays"
 					min="1"
 					max={dayDiff}
 				/>
 				<p class="validator-hint">Must be between 1 and {dayDiff}</p>
 			</div>
-			<div class="flex flex-col gap-1">
+			<div class="flex flex-col gap-1 w-full">
 				<label for="description">Comments</label>
-				<textarea id="description" class="textarea" name="description"></textarea>
+				<textarea id="description" class="textarea w-full" name="description"></textarea>
 			</div>
 			<button class="btn btn-primary my-2">Confirm attendence</button>
 		</form>
