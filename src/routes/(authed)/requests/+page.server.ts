@@ -1,12 +1,13 @@
 import { TOTAL_BUDGET } from '$lib/constants';
 import { db } from '$lib/server/db';
-import { trainingRequestTable, trainingTable, costTable } from '$lib/server/db/schema';
+import { costTable, trainingRequestTable, trainingTable } from '$lib/server/db/schema';
+import { redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import type { Actions, LayoutServerLoad } from '../$types';
+import { createInsertSchema } from 'drizzle-zod';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { createInsertSchema } from 'drizzle-zod';
-import { redirect } from '@sveltejs/kit';
+import type { Actions, LayoutServerLoad } from '../$types';
+import { REQUEST_STATES } from "../../../lib/server/db/schema";
 import { schema } from './schema';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
@@ -24,11 +25,13 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		.from(trainingRequestTable)
 		.leftJoin(trainingTable, eq(trainingRequestTable.trainingId, trainingTable.id))
 		.where(eq(trainingRequestTable.userId, locals.user!.id));
-	const usedBudget = trainingRequests.reduce(
-		(acc, { durationDays, ticketCost }) =>
-			acc + (parseFloat(durationDays) * 500 + (ticketCost ? Number(ticketCost) : 0)),
-		0
-	);
+	const usedBudget = trainingRequests
+		.filter(request => request.status != REQUEST_STATES[2])
+		.reduce(
+			(total, { durationDays, ticketCost }) =>
+				total + (parseFloat(durationDays) * 500 + (ticketCost ? Number(ticketCost) : 0)),
+			0
+		);
 
 	const availableBudget = TOTAL_BUDGET - usedBudget;
 	return { trainingRequests, availableBudget, usedBudget };
